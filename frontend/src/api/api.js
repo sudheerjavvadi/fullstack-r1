@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = '/api';
+// In production, set VITE_API_URL to your Render backend URL, e.g.:
+// VITE_API_URL=https://your-backend-name.onrender.com/api
+// In development, falls back to '/api' which the Vite proxy forwards to localhost:8080
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 // Create axios instance with default config
 const api = axios.create({
