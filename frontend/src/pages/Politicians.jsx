@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { userAPI, feedbackAPI } from '../api/api';
 import { FiStar, FiMapPin, FiMail } from 'react-icons/fi';
 
 function Politicians() {
+    const navigate = useNavigate();
     const [politicians, setPoliticians] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ratings, setRatings] = useState({});
@@ -104,7 +106,11 @@ function Politicians() {
                                 )}
                             </div>
 
-                            <button className="btn btn-outline" style={{ marginTop: '1rem', width: '100%' }}>
+                            <button
+                                onClick={() => navigate(`/politicians/${politician.id}`)}
+                                className="btn btn-outline"
+                                style={{ marginTop: '1rem', width: '100%' }}
+                            >
                                 View Profile
                             </button>
                         </div>

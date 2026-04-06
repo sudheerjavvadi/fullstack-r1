@@ -71,7 +71,7 @@ public class SecurityConfig {
     @Bean
     @SuppressWarnings("deprecation")
     public PasswordEncoder passwordEncoder() {
-        // Using plain text passwords for demo - NOT for production
+        // Plain text passwords for demo purposes
         return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 

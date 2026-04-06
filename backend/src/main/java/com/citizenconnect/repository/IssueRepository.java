@@ -68,4 +68,8 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
     // Find issues created within date range
     @Query("SELECT i FROM Issue i WHERE i.createdAt BETWEEN :startDate AND :endDate")
     List<Issue> findByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    // Batch comment count — avoids N+1 when mapping a list of issues to DTOs
+    @Query("SELECT c.issue.id, COUNT(c) FROM Comment c WHERE c.issue.id IN :issueIds GROUP BY c.issue.id")
+    List<Object[]> countCommentsByIssueIds(@Param("issueIds") List<Long> issueIds);
 }

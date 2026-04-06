@@ -11,7 +11,11 @@ export const store = configureStore({
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
-            serializableCheck: false,
+            serializableCheck: {
+                // Ignore timestamp fields (LocalDateTime from backend comes as array)
+                ignoredPaths: ['auth.user.createdAt', 'issues.currentIssue.createdAt', 'issues.currentIssue.resolvedAt'],
+                ignoredActionPaths: ['payload.createdAt', 'payload.resolvedAt', 'payload.user.createdAt'],
+            },
         }),
 });
 

@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +52,8 @@ public class IssueService {
         issue.setDescription(request.getDescription());
         issue.setCategory(request.getCategory());
         issue.setLocation(request.getLocation());
+        issue.setAttachmentFileName(request.getAttachmentFileName());
+        issue.setAttachmentUrl(request.getAttachmentUrl());
         issue.setStatus(IssueStatus.OPEN);
         issue.setCitizen(citizen);
 
@@ -77,29 +80,37 @@ public class IssueService {
 
     @Transactional(readOnly = true)
     public List<IssueDTO> getAllIssues() {
-        return issueRepository.findAllOrderByCreatedAtDesc().stream()
-                .map(this::mapToDTO)
+        List<Issue> issues = issueRepository.findAllOrderByCreatedAtDesc();
+        Map<Long, Long> commentCounts = batchLoadCommentCounts(issues);
+        return issues.stream()
+                .map(i -> mapToDTO(i, commentCounts))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<IssueDTO> getIssuesByCitizen(Long citizenId) {
-        return issueRepository.findByCitizenIdOrderByCreatedAtDesc(citizenId).stream()
-                .map(this::mapToDTO)
+        List<Issue> issues = issueRepository.findByCitizenIdOrderByCreatedAtDesc(citizenId);
+        Map<Long, Long> commentCounts = batchLoadCommentCounts(issues);
+        return issues.stream()
+                .map(i -> mapToDTO(i, commentCounts))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<IssueDTO> getIssuesByPolitician(Long politicianId) {
-        return issueRepository.findByPoliticianOrderByPriority(politicianId).stream()
-                .map(this::mapToDTO)
+        List<Issue> issues = issueRepository.findByPoliticianOrderByPriority(politicianId);
+        Map<Long, Long> commentCounts = batchLoadCommentCounts(issues);
+        return issues.stream()
+                .map(i -> mapToDTO(i, commentCounts))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<IssueDTO> getIssuesByStatus(IssueStatus status) {
-        return issueRepository.findByStatus(status).stream()
-                .map(this::mapToDTO)
+        List<Issue> issues = issueRepository.findByStatus(status);
+        Map<Long, Long> commentCounts = batchLoadCommentCounts(issues);
+        return issues.stream()
+                .map(i -> mapToDTO(i, commentCounts))
                 .collect(Collectors.toList());
     }
 
@@ -190,13 +201,32 @@ public class IssueService {
         return issueRepository.countByStatus(status);
     }
 
+    /**
+     * Loads comment counts for a list of issues in a SINGLE query (avoids N+1).
+     */
+    private Map<Long, Long> batchLoadCommentCounts(List<Issue> issues) {
+        if (issues.isEmpty()) return Map.of();
+        List<Long> ids = issues.stream().map(Issue::getId).collect(Collectors.toList());
+        return issueRepository.countCommentsByIssueIds(ids).stream()
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> (Long) row[1]
+                ));
+    }
+
     private IssueDTO mapToDTO(Issue issue) {
+        return mapToDTO(issue, null);
+    }
+
+    private IssueDTO mapToDTO(Issue issue, Map<Long, Long> commentCounts) {
         IssueDTO dto = new IssueDTO();
         dto.setId(issue.getId());
         dto.setTitle(issue.getTitle());
         dto.setDescription(issue.getDescription());
         dto.setCategory(issue.getCategory());
         dto.setLocation(issue.getLocation());
+        dto.setAttachmentFileName(issue.getAttachmentFileName());
+        dto.setAttachmentUrl(issue.getAttachmentUrl());
         dto.setStatus(issue.getStatus());
         dto.setResponse(issue.getResponse());
         dto.setResolutionNotes(issue.getResolutionNotes());
@@ -210,8 +240,12 @@ public class IssueService {
             dto.setAssignedPoliticianName(issue.getAssignedPolitician().getFullName());
         }
 
-        Long commentCount = commentRepository.countByIssueId(issue.getId());
-        dto.setCommentCount(commentCount != null ? commentCount.intValue() : 0);
+        // Use pre-loaded batch counts if available, otherwise fall back to single query
+        long count = (commentCounts != null)
+                ? commentCounts.getOrDefault(issue.getId(), 0L)
+                : (commentRepository.countByIssueId(issue.getId()) != null
+                        ? commentRepository.countByIssueId(issue.getId()) : 0L);
+        dto.setCommentCount((int) count);
 
         return dto;
     }

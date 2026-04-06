@@ -28,6 +28,7 @@ C:\co\2.2\s09\project\FSAD-project-master\backend\src\main\java\com\citizenconne
 C:\co\2.2\s09\project\FSAD-project-master\backend\src\main\java\com\citizenconnect\aspect\LoggingAspect.java
 C:\co\2.2\s09\project\FSAD-project-master\backend\src\main\java\com\citizenconnect\dto\UpdateDTO.java
 C:\co\2.2\s09\project\FSAD-project-master\backend\src\main\java\com\citizenconnect\repository\UpdateRepository.java
+C:\co\2.2\s09\project\FSAD-project-master\backend\src\main\java\com\citizenconnect\config\DataInitializer.java
 C:\co\2.2\s09\project\FSAD-project-master\backend\src\main\java\com\citizenconnect\entity\Issue.java
 C:\co\2.2\s09\project\FSAD-project-master\backend\src\main\java\com\citizenconnect\dto\ApiResponse.java
 C:\co\2.2\s09\project\FSAD-project-master\backend\src\main\java\com\citizenconnect\dto\FeedbackDTO.java

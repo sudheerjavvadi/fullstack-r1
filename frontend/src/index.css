@@ -1,3 +1,5 @@
+/* Tailwind CSS is loaded via CDN in index.html */
+
 /* ===============================================
    CITIZEN CONNECT - PREMIUM DESIGN SYSTEM
    Modern, Dark Theme with Glassmorphism Effects
@@ -23,11 +25,11 @@
   --accent-amber: #f59e0b;
   --accent-rose: #f43f5e;
 
-  /* Dark Theme Background */
-  --bg-primary: #0f0f23;
-  --bg-secondary: #1a1a2e;
-  --bg-tertiary: #16213e;
-  --bg-card: rgba(26, 26, 46, 0.8);
+  /* Dark Theme Background - Nothing UI Black/Gray */
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-tertiary: #131313;
+  --bg-card: rgba(20, 20, 20, 0.6);
   --bg-glass: rgba(255, 255, 255, 0.05);
 
   /* Text Colors */
@@ -45,7 +47,7 @@
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-dark: linear-gradient(180deg, #0f0f23 0%, #1a1a2e 100%);
+  --gradient-dark: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
 
   /* Typography */
@@ -166,14 +168,58 @@ select,
   }
 }
 
+.footer-panel {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.footer-social-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: #ef4444;
+  color: #ffffff;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.footer-social-button:hover {
+  background: #f97316;
+  transform: translateY(-2px);
+}
+
+.footer-panel a {
+  color: #cbd5e1;
+}
+
+.footer-panel a:hover {
+  color: #ffffff;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--spacing-xl);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 /* ===============================================
    NAVIGATION / HEADER
    =============================================== */
 
 .navbar {
   background: var(--bg-glass);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
   padding: var(--spacing-md) var(--spacing-xl);
   position: sticky;
@@ -267,8 +313,8 @@ select,
 
 .card {
   background: var(--bg-card);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
@@ -288,8 +334,8 @@ select,
 .issue-card,
 .glass-card,
 .feature-card {
-  user-select: none;
   -webkit-user-select: none;
+  user-select: none;
 }
 
 .card *,
@@ -303,8 +349,8 @@ select,
 .issue-description,
 .update-meta,
 .moderation-text {
-  user-select: text;
   -webkit-user-select: text;
+  user-select: text;
   cursor: text;
 }
 
@@ -330,8 +376,8 @@ select,
 /* Glass Effect Card */
 .glass-card {
   background: var(--gradient-glass);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
@@ -396,13 +442,14 @@ select,
 
 .btn-outline {
   background: transparent;
-  border: 1px solid var(--primary-500);
-  color: var(--primary-400);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: #cbd5e1;
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: var(--primary-500);
-  color: white;
+  background: rgba(148, 163, 184, 0.1);
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.7);
 }
 
 .btn-lg {
@@ -544,9 +591,9 @@ select,
 }
 
 .badge-politician {
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--primary-400);
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
 .badge-citizen {
@@ -594,8 +641,8 @@ select,
   padding: var(--spacing-xl);
   text-align: center;
   cursor: default;
-  user-select: none;
   -webkit-user-select: none;
+  user-select: none;
 }
 
 .feature-card * {
@@ -821,6 +868,7 @@ select,
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
@@ -974,6 +1022,7 @@ select,
   color: var(--text-primary);
   margin-bottom: var(--spacing-sm);
   cursor: default;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -981,6 +1030,7 @@ select,
   color: var(--text-secondary);
   font-size: 1rem;
   cursor: default;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -1495,15 +1545,15 @@ a.issue-card:hover {
 
 .politician-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-glow);
-  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 10px 40px rgba(100, 116, 139, 0.2);
+  border-color: rgba(148, 163, 184, 0.3);
 }
 
 .politician-avatar {
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1511,7 +1561,7 @@ a.issue-card:hover {
   font-weight: 700;
   color: white;
   margin: 0 auto 1rem;
-  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 32px rgba(100, 116, 139, 0.2);
 }
 
 .politician-name {

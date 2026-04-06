@@ -141,8 +141,29 @@ function IssueDetail() {
                             </p>
                         </div>
 
+                        {issue.attachmentUrl && (
+                            <div style={{
+                                padding: '1.25rem',
+                                background: 'rgba(255,255,255,0.06)',
+                                borderRadius: 'var(--radius-lg)',
+                                marginBottom: '1.5rem',
+                                border: '1px solid rgba(255,255,255,0.08)'
+                            }}>
+                                <strong>Attachment:</strong>
+                                <p style={{ margin: '0.5rem 0 0' }}>
+                                    <a
+                                        href={issue.attachmentUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        style={{ color: '#a5b4fc', textDecoration: 'underline' }}
+                                    >
+                                        {issue.attachmentFileName || 'View file'}
+                                    </a>
+                                </p>
+                            </div>
+                        )}
+
                         {/* Politician Response */}
-                        {issue.response && (
                             <div style={{
                                 padding: '1.5rem',
                                 background: 'rgba(99, 102, 241, 0.1)',

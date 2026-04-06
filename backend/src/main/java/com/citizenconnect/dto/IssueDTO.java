@@ -9,6 +9,8 @@ public class IssueDTO {
     private String description;
     private String category;
     private String location;
+    private String attachmentFileName;
+    private String attachmentUrl;
     private IssueStatus status;
     private String response;
     private String resolutionNotes;
@@ -62,6 +64,22 @@ public class IssueDTO {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getAttachmentFileName() {
+        return attachmentFileName;
+    }
+
+    public void setAttachmentFileName(String attachmentFileName) {
+        this.attachmentFileName = attachmentFileName;
+    }
+
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
     }
 
     public IssueStatus getStatus() {

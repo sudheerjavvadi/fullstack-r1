@@ -24,7 +24,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            const result = await dispatch(login(formData)).unwrap();
+            await dispatch(login(formData)).unwrap();
             toast.success('Login successful! Welcome back.');
             navigate('/dashboard');
         } catch (err) {
@@ -33,18 +33,40 @@ function Login() {
     };
 
     return (
-        <div className="page-container" style={{ maxWidth: '450px', margin: '0 auto' }}>
-            <div className="card">
-                <div className="text-center mb-lg">
-                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Welcome Back</h1>
-                    <p className="text-muted">Sign in to your account to continue</p>
+        <div
+            className="page-container"
+            style={{
+                maxWidth: '520px',
+                margin: '0 auto',
+                minHeight: 'calc(100vh - 88px)',
+                padding: '2.5rem 1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+            }}
+        >
+            <div
+                className="card"
+                style={{
+                    width: '100%',
+                    padding: '2.5rem',
+                    background: 'rgba(15, 15, 35, 0.92)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                }}
+            >
+                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <p style={{ fontSize: '0.75rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(148, 163, 184, 0.85)' }}>
+                        CitizenConnect
+                    </p>
+                    <h1 style={{ marginTop: '1rem', fontSize: '2.75rem', fontWeight: 700 }}>Sign in to continue</h1>
+                    <p style={{ marginTop: '1rem', color: 'rgba(148, 163, 184, 0.95)', lineHeight: 1.75 }}>
+                        Access your dashboard, report issues, and stay connected with your community.
+                    </p>
                 </div>
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label className="form-label">
-                            <FiMail style={{ marginRight: '0.5rem' }} />
-                            Email Address
+                            <FiMail style={{ marginRight: '0.5rem' }} /> Email Address
                         </label>
                         <input
                             type="email"
@@ -59,8 +81,7 @@ function Login() {
 
                     <div className="form-group">
                         <label className="form-label">
-                            <FiLock style={{ marginRight: '0.5rem' }} />
-                            Password
+                            <FiLock style={{ marginRight: '0.5rem' }} /> Password
                         </label>
                         <input
                             type="password"
@@ -73,32 +94,17 @@ function Login() {
                         />
                     </div>
 
-                    {error && <p className="form-error mb-md">{error}</p>}
+                    {error && <p className="form-error">{error}</p>}
 
-                    <button
-                        type="submit"
-                        className="btn btn-primary btn-lg"
-                        style={{ width: '100%' }}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <>
-                                <div className="spinner" style={{ width: '20px', height: '20px' }}></div>
-                                Signing in...
-                            </>
-                        ) : (
-                            <>
-                                <FiLogIn />
-                                Sign In
-                            </>
-                        )}
+                    <button type="submit" className="btn btn-primary btn-lg" disabled={loading} style={{ width: '100%' }}>
+                        {loading ? 'Signing in...' : <><FiLogIn /> Sign In</>}
                     </button>
                 </form>
 
-                <div className="text-center mt-lg">
-                    <p className="text-muted">
+                <div style={{ marginTop: '1.75rem', textAlign: 'center', color: 'rgba(148, 163, 184, 0.95)', fontSize: '0.95rem' }}>
+                    <p>
                         Don't have an account?{' '}
-                        <Link to="/register" className="text-primary">
+                        <Link to="/register" style={{ color: '#ffffff', textDecoration: 'underline' }}>
                             Register here
                         </Link>
                     </p>

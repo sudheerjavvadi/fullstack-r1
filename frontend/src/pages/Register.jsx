@@ -43,7 +43,7 @@ function Register() {
                 email: formData.email,
                 password: formData.password,
                 phone: formData.phone,
-                constituency: formData.constituency
+                constituency: formData.constituency,
             })).unwrap();
 
             toast.success('Registration successful! Please login.');
@@ -54,51 +54,72 @@ function Register() {
     };
 
     return (
-        <div className="page-container" style={{ maxWidth: '500px', margin: '0 auto' }}>
-            <div className="card">
-                <div className="text-center mb-lg">
-                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Create Account</h1>
-                    <p className="text-muted">Join CitizenConnect as a citizen</p>
+        <div
+            className="page-container"
+            style={{
+                maxWidth: '640px',
+                margin: '0 auto',
+                minHeight: 'calc(100vh - 88px)',
+                padding: '2.5rem 1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+            }}
+        >
+            <div
+                className="card"
+                style={{
+                    width: '100%',
+                    padding: '2.5rem',
+                    background: 'rgba(15, 15, 35, 0.92)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                }}
+            >
+                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <p style={{ fontSize: '0.75rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(148, 163, 184, 0.85)' }}>
+                        CitizenConnect
+                    </p>
+                    <h1 style={{ marginTop: '1rem', fontSize: '2.75rem', fontWeight: 700 }}>Create your citizen account</h1>
+                    <p style={{ marginTop: '1rem', color: 'rgba(148, 163, 184, 0.95)', lineHeight: 1.75 }}>
+                        Register with your local details and start reporting issues with evidence attachments.
+                    </p>
                 </div>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label className="form-label">
-                            <FiUser style={{ marginRight: '0.5rem' }} />
-                            Full Name
-                        </label>
-                        <input
-                            type="text"
-                            name="fullName"
-                            className="form-input"
-                            placeholder="Enter your full name"
-                            value={formData.fullName}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label className="form-label">
-                            <FiMail style={{ marginRight: '0.5rem' }} />
-                            Email Address
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            className="form-input"
-                            placeholder="Enter your email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1.5rem' }}>
+                    <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: '1fr 1fr' }}>
                         <div className="form-group">
                             <label className="form-label">
-                                <FiLock style={{ marginRight: '0.5rem' }} />
-                                Password
+                                <FiUser style={{ marginRight: '0.5rem' }} /> Full Name
+                            </label>
+                            <input
+                                type="text"
+                                name="fullName"
+                                className="form-input"
+                                placeholder="Enter your full name"
+                                value={formData.fullName}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">
+                                <FiMail style={{ marginRight: '0.5rem' }} /> Email Address
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                className="form-input"
+                                placeholder="Enter your email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: '1fr 1fr' }}>
+                        <div className="form-group">
+                            <label className="form-label">
+                                <FiLock style={{ marginRight: '0.5rem' }} /> Password
                             </label>
                             <input
                                 type="password"
@@ -110,11 +131,9 @@ function Register() {
                                 required
                             />
                         </div>
-
                         <div className="form-group">
                             <label className="form-label">
-                                <FiLock style={{ marginRight: '0.5rem' }} />
-                                Confirm Password
+                                <FiLock style={{ marginRight: '0.5rem' }} /> Confirm Password
                             </label>
                             <input
                                 type="password"
@@ -128,62 +147,46 @@ function Register() {
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <label className="form-label">
-                            <FiPhone style={{ marginRight: '0.5rem' }} />
-                            Phone Number (Optional)
-                        </label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            className="form-input"
-                            placeholder="Enter phone number"
-                            value={formData.phone}
-                            onChange={handleChange}
-                        />
+                    <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: '1fr 1fr' }}>
+                        <div className="form-group">
+                            <label className="form-label">
+                                <FiPhone style={{ marginRight: '0.5rem' }} /> Phone Number
+                            </label>
+                            <input
+                                type="tel"
+                                name="phone"
+                                className="form-input"
+                                placeholder="Optional"
+                                value={formData.phone}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">
+                                <FiMapPin style={{ marginRight: '0.5rem' }} /> Constituency
+                            </label>
+                            <input
+                                type="text"
+                                name="constituency"
+                                className="form-input"
+                                placeholder="Optional"
+                                value={formData.constituency}
+                                onChange={handleChange}
+                            />
+                        </div>
                     </div>
 
-                    <div className="form-group">
-                        <label className="form-label">
-                            <FiMapPin style={{ marginRight: '0.5rem' }} />
-                            Constituency (Optional)
-                        </label>
-                        <input
-                            type="text"
-                            name="constituency"
-                            className="form-input"
-                            placeholder="Enter your constituency"
-                            value={formData.constituency}
-                            onChange={handleChange}
-                        />
-                    </div>
+                    {error && <p className="form-error">{error}</p>}
 
-                    {error && <p className="form-error mb-md">{error}</p>}
-
-                    <button
-                        type="submit"
-                        className="btn btn-primary btn-lg"
-                        style={{ width: '100%' }}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <>
-                                <div className="spinner" style={{ width: '20px', height: '20px' }}></div>
-                                Creating Account...
-                            </>
-                        ) : (
-                            <>
-                                <FiUserPlus />
-                                Create Account
-                            </>
-                        )}
+                    <button type="submit" className="btn btn-primary btn-lg" disabled={loading} style={{ width: '100%' }}>
+                        {loading ? 'Creating account...' : <><FiUserPlus /> Create Account</>}
                     </button>
                 </form>
 
-                <div className="text-center mt-lg">
-                    <p className="text-muted">
+                <div style={{ marginTop: '1.75rem', textAlign: 'center', color: 'rgba(148, 163, 184, 0.95)', fontSize: '0.95rem' }}>
+                    <p>
                         Already have an account?{' '}
-                        <Link to="/login" className="text-primary">
+                        <Link to="/login" style={{ color: '#ffffff', textDecoration: 'underline' }}>
                             Sign in here
                         </Link>
                     </p>

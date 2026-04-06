@@ -70,7 +70,7 @@ export const issueAPI = {
     getMyIssues: () => api.get('/issues/my-issues'),
     getAssigned: () => api.get('/issues/assigned'),
     getByStatus: (status) => api.get(`/issues/status/${status}`),
-    search: (keyword) => api.get(`/issues/search?keyword=${keyword}`),
+    search: (keyword) => api.get(`/issues/search?keyword=${encodeURIComponent(keyword)}`),
     create: (issueData) => api.post('/issues', issueData),
     assign: (id, politicianId) => api.put(`/issues/${id}/assign?politicianId=${politicianId}`),
     respond: (id, response) => api.put(`/issues/${id}/respond`, { response }),

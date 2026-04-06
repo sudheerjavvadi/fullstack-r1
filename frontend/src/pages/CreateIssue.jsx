@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createIssue } from '../store/slices/issueSlice';
-import { userAPI } from '../api/api';
+import { userAPI, fileAPI } from '../api/api';
 import { toast } from 'react-toastify';
 import { FiArrowLeft, FiSend } from 'react-icons/fi';
 
@@ -17,6 +17,8 @@ function CreateIssue() {
         location: '',
         assignedPoliticianId: ''
     });
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [filePreview, setFilePreview] = useState('');
     const [politicians, setPoliticians] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -31,6 +33,18 @@ function CreateIssue() {
         };
         fetchPoliticians();
     }, []);
+
+    useEffect(() => {
+        if (!selectedFile) {
+            setFilePreview('');
+            return;
+        }
+
+        const url = URL.createObjectURL(selectedFile);
+        setFilePreview(url);
+
+        return () => URL.revokeObjectURL(url);
+    }, [selectedFile]);
 
     const categories = [
         'Infrastructure',
@@ -49,6 +63,11 @@ function CreateIssue() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0] || null;
+        setSelectedFile(file);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -58,6 +77,14 @@ function CreateIssue() {
                 ...formData,
                 assignedPoliticianId: formData.assignedPoliticianId || null
             };
+
+            if (selectedFile) {
+                const uploadRes = await fileAPI.upload(selectedFile);
+                const data = uploadRes.data.data;
+                payload.attachmentFileName = data.filename;
+                payload.attachmentUrl = data.fileDownloadUri;
+            }
+
             await dispatch(createIssue(payload)).unwrap();
             toast.success('Issue reported successfully!');
             navigate('/issues');
@@ -69,21 +96,35 @@ function CreateIssue() {
     };
 
     return (
-        <div className="page-container" style={{ maxWidth: '700px', margin: '0 auto' }}>
+        <div
+            className="page-container"
+            style={{
+                maxWidth: '720px',
+                margin: '0 auto',
+                padding: '2.5rem 1.5rem',
+            }}
+        >
             <button
                 onClick={() => navigate(-1)}
-                className="btn btn-secondary mb-lg"
+                className="btn btn-secondary"
+                style={{ marginBottom: '1.5rem' }}
             >
                 <FiArrowLeft /> Back
             </button>
 
-            <div className="card">
-                <h1 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>Report an Issue</h1>
-                <p className="text-muted mb-lg">
+            <div
+                className="card"
+                style={{
+                    background: 'rgba(15, 15, 35, 0.92)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                }}
+            >
+                <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Report an Issue</h1>
+                <p className="text-muted" style={{ marginBottom: '1.5rem' }}>
                     Describe the issue you want to report to your representative.
                 </p>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1.5rem' }}>
                     <div className="form-group">
                         <label className="form-label">Issue Title *</label>
                         <input
@@ -127,7 +168,7 @@ function CreateIssue() {
                             minLength={20}
                             style={{ minHeight: '150px' }}
                         />
-                        <p className="text-muted mt-sm" style={{ fontSize: '0.75rem' }}>
+                        <p className="text-muted" style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>
                             Minimum 20 characters. Be as detailed as possible.
                         </p>
                     </div>
@@ -142,6 +183,31 @@ function CreateIssue() {
                             value={formData.location}
                             onChange={handleChange}
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Attach Image or PDF</label>
+                        <input
+                            type="file"
+                            accept="image/*,application/pdf"
+                            onChange={handleFileChange}
+                            className="form-input"
+                            style={{ padding: '0.8rem 1rem' }}
+                        />
+                        {selectedFile && (
+                            <div style={{ marginTop: '0.75rem', color: 'rgba(148, 163, 184, 0.95)' }}>
+                                Selected file: <strong>{selectedFile.name}</strong>
+                            </div>
+                        )}
+                        {filePreview && selectedFile?.type?.startsWith('image/') && (
+                            <div style={{ marginTop: '1rem' }}>
+                                <img
+                                    src={filePreview}
+                                    alt="Preview"
+                                    style={{ width: '100%', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.08)' }}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -161,7 +227,7 @@ function CreateIssue() {
                         </select>
                     </div>
 
-                    <div className="flex gap-md mt-lg">
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
                         <button
                             type="button"
                             onClick={() => navigate(-1)}
@@ -174,16 +240,7 @@ function CreateIssue() {
                             className="btn btn-primary"
                             disabled={loading}
                         >
-                            {loading ? (
-                                <>
-                                    <div className="spinner" style={{ width: '16px', height: '16px' }}></div>
-                                    Submitting...
-                                </>
-                            ) : (
-                                <>
-                                    <FiSend /> Submit Issue
-                                </>
-                            )}
+                            {loading ? 'Submitting...' : <><FiSend /> Submit Issue</>}
                         </button>
                     </div>
                 </form>

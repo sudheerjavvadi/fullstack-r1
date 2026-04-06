@@ -92,8 +92,8 @@ function AdminDashboard() {
     };
 
     return (
-        <div className="page-container">
-            <div className="page-header">
+        <div className="page-container bg-black">
+            <div className="page-header bg-black">
                 <h1 className="page-title">Admin Dashboard</h1>
                 <p className="page-description">Manage users and monitor platform activity.</p>
             </div>
