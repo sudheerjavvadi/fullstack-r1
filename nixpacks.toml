@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["jdk17_headless", "maven"]
+
+[phases.build]
+cmds = ["cd backend && mvn clean package -DskipTests -Dproject.build.sourceEncoding=UTF-8"]
+
+[start]
+cmd = "java -Dserver.port=${PORT:-8080} -jar backend/target/citizen-connect-backend-1.0.0.jar"
