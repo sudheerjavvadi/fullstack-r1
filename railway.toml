@@ -1,0 +1,21 @@
+[build]
+builder = "nixpacks"
+
+[build.settings]
+buildCommand = "cd backend && mvn clean package -DskipTests -Dproject.build.sourceEncoding=UTF-8"
+
+[deploy]
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+
+[[services]]
+name = "backend"
+buildCommand = "cd backend && mvn clean package -DskipTests"
+startCommand = "java -Dserver.port=$PORT -jar backend/target/citizen-connect-backend-1.0.0.jar"
+plan = "starter"
+
+[[services]]
+name = "frontend"
+buildCommand = "npm install --prefix frontend && npm run build --prefix frontend"
+startCommand = "npm start --prefix frontend"
+plan = "starter"
