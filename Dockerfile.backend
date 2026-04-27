@@ -7,7 +7,7 @@ WORKDIR /build
 COPY backend/pom.xml .
 
 # Download dependencies (cache layer)
-RUN mvn dependency:go-offline
+RUN mvn dependency:go-offline -B
 
 # Copy source code
 COPY backend/src ./src
@@ -23,20 +23,8 @@ WORKDIR /app
 # Copy JAR from builder
 COPY --from=builder /build/target/citizen-connect-backend-1.0.0.jar app.jar
 
-# Create non-root user for security
-RUN addgroup -g 1000 appuser && \
-    adduser -D -u 1000 -G appuser appuser && \
-    chown appuser:appuser /app
-
-USER appuser
-
-# Expose port (Railway will override with $PORT)
+# Expose port
 EXPOSE 8080
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD wget --quiet --tries=1 --spider http://localhost:8080/api/health || exit 1
-
-# Run application with proper port binding
-CMD ["java", "-XX:+UseAlwaysStrictFP", "-Dserver.port=8080", "-jar", "app.jar"]
-
+# Run application - Railway sets $PORT, Spring Boot reads server.port
+ENTRYPOINT ["java", "-jar", "app.jar"]
