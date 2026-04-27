@@ -1,14 +1,19 @@
-# Stage 1: Build
+# Stage 1: Build with Maven
 FROM maven:3.9-eclipse-temurin-17 AS builder
 
-WORKDIR /app
+WORKDIR /build
 
-# Copy backend source code
-COPY backend/pom.xml backend/pom.xml
-COPY backend/src backend/src
+# Copy pom.xml
+COPY backend/pom.xml .
 
-# Build the application
-RUN cd backend && mvn clean package -DskipTests
+# Download dependencies (cache layer)
+RUN mvn dependency:go-offline
+
+# Copy source code
+COPY backend/src ./src
+
+# Build application
+RUN mvn clean package -DskipTests -Dproject.build.sourceEncoding=UTF-8
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre-alpine
@@ -16,11 +21,22 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Copy JAR from builder
-COPY --from=builder /app/backend/target/*.jar app.jar
+COPY --from=builder /build/target/citizen-connect-backend-1.0.0.jar app.jar
 
-# Expose port
+# Create non-root user for security
+RUN addgroup -g 1000 appuser && \
+    adduser -D -u 1000 -G appuser appuser && \
+    chown appuser:appuser /app
+
+USER appuser
+
+# Expose port (Railway will override with $PORT)
 EXPOSE 8080
 
-# Run the application
-ENV PORT=8080
-ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD wget --quiet --tries=1 --spider http://localhost:8080/api/health || exit 1
+
+# Run application with proper port binding
+CMD ["java", "-XX:+UseAlwaysStrictFP", "-Dserver.port=8080", "-jar", "app.jar"]
+
