@@ -1,0 +1,7 @@
+{
+  "build": {
+    "settings": {
+      "buildCommand": "cd backend && mvn clean package -DskipTests"
+    }
+  }
+}
